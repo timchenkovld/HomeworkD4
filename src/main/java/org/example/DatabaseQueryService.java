@@ -3,10 +3,7 @@ package org.example;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,21 +15,21 @@ public class DatabaseQueryService {
         this.database = database;
     }
 
-    public List<ProjectPricesInfoClient> findProjectPrices(){
+    public List<ProjectPricesInfoClient> findProjectPrices() {
         List<ProjectPricesInfoClient> projectPricesInfoClients = new ArrayList<>();
         Connection connection = database.getConnection();
         String sqlFilePath = "sql/print_project_prices.sql";
-        StringBuilder sqlQuery = new StringBuilder();
         try (BufferedReader reader = new BufferedReader(new FileReader(sqlFilePath))) {
             String line;
+            StringBuilder sqlQuery = new StringBuilder();
             while ((line = reader.readLine()) != null) {
                 if (line.trim().isEmpty()) {
                     continue;
                 }
                 sqlQuery.append(line).append("\n");
             }
-            try (Statement statement = connection.createStatement();
-                 ResultSet resultSet = statement.executeQuery(sqlQuery.toString())) {
+            try (PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery.toString());
+                 ResultSet resultSet = preparedStatement.executeQuery()) {
                 while (resultSet.next()) {
                     String name = resultSet.getString("project.NAME");
                     int price = resultSet.getInt("PRICE");
@@ -49,17 +46,17 @@ public class DatabaseQueryService {
         List<ProjectDurationClient> projectDurations = new ArrayList<>();
         Connection connection = database.getConnection();
         String sqlFilePath = "sql/find_longest_project.sql";
-        StringBuilder sqlQuery = new StringBuilder();
         try (BufferedReader reader = new BufferedReader(new FileReader(sqlFilePath))) {
             String line;
+            StringBuilder sqlQuery = new StringBuilder();
             while ((line = reader.readLine()) != null) {
                 if (line.trim().isEmpty()) {
                     continue;
                 }
                 sqlQuery.append(line).append("\n");
             }
-            try (Statement statement = connection.createStatement();
-                 ResultSet resultSet = statement.executeQuery(sqlQuery.toString())) {
+            try (PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery.toString());
+                 ResultSet resultSet = preparedStatement.executeQuery()) {
                 while (resultSet.next()) {
                     String name = resultSet.getString("project.NAME");
                     int monthCount = resultSet.getInt("MONTH_COUNT");
@@ -76,17 +73,17 @@ public class DatabaseQueryService {
         List<MaxSalaryWorkerClient> maxSalaryWorkerClient = new ArrayList<>();
         Connection connection = database.getConnection();
         String sqlFilePath = "sql/find_max_salary_worker.sql";
-        StringBuilder sqlQuery = new StringBuilder();
         try (BufferedReader reader = new BufferedReader(new FileReader(sqlFilePath))) {
             String line;
+            StringBuilder sqlQuery = new StringBuilder();
             while ((line = reader.readLine()) != null) {
                 if (line.trim().isEmpty()) {
                     continue;
                 }
                 sqlQuery.append(line).append("\n");
             }
-            try (Statement statement = connection.createStatement();
-                 ResultSet resultSet = statement.executeQuery(sqlQuery.toString())) {
+            try (PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery.toString());
+                 ResultSet resultSet = preparedStatement.executeQuery()) {
                 while (resultSet.next()) {
                     String name = resultSet.getString("NAME");
                     int salary = resultSet.getInt("SALARY");
@@ -103,17 +100,17 @@ public class DatabaseQueryService {
         List<WorkerInfoClient> workerInfoList = new ArrayList<>();
         Connection connection = database.getConnection();
         String sqlFilePath = "sql/find_youngest_eldest_workers.sql";
-        StringBuilder sqlQuery = new StringBuilder();
         try (BufferedReader reader = new BufferedReader(new FileReader(sqlFilePath))) {
             String line;
+            StringBuilder sqlQuery = new StringBuilder();
             while ((line = reader.readLine()) != null) {
                 if (line.trim().isEmpty()) {
                     continue;
                 }
                 sqlQuery.append(line).append("\n");
             }
-            try (Statement statement = connection.createStatement();
-                 ResultSet resultSet = statement.executeQuery(sqlQuery.toString())) {
+            try (PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery.toString());
+                 ResultSet resultSet = preparedStatement.executeQuery()) {
                 while (resultSet.next()) {
                     String type = resultSet.getString("TYPE");
                     String name = resultSet.getString("NAME");
@@ -131,17 +128,17 @@ public class DatabaseQueryService {
         List<MaxProjectCountClient> maxProjectCountClients = new ArrayList<>();
         Connection connection = database.getConnection();
         String sqlFilePath = "sql/find_max_projects_client.sql";
-        StringBuilder sqlQuery = new StringBuilder();
         try (BufferedReader reader = new BufferedReader(new FileReader(sqlFilePath))) {
             String line;
+            StringBuilder sqlQuery = new StringBuilder();
             while ((line = reader.readLine()) != null) {
                 if (line.trim().isEmpty()) {
                     continue;
                 }
                 sqlQuery.append(line).append("\n");
             }
-            try (Statement statement = connection.createStatement();
-                 ResultSet resultSet = statement.executeQuery(sqlQuery.toString())) {
+            try (PreparedStatement preparedStatement = connection.prepareStatement(sqlQuery.toString());
+                 ResultSet resultSet = preparedStatement.executeQuery()) {
                 while (resultSet.next()) {
                     String name = resultSet.getString("NAME");
                     int projectCount = resultSet.getInt("PROJECT_COUNT");
